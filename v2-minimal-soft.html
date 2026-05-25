@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Solvance — Local websites, built in 14 days</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-2:#f6f7f9;
+    --bg-3:#eef1f5;
+    --ink:#0a0a0c;
+    --ink-2:#26272b;
+    --mute:#646973;
+    --mute-2:#9aa0ad;
+    --line:#e6e8ee;
+    --line-2:#eef0f4;
+    --brand:#0a84ff;
+    --brand-2:#34c759;
+    --soft:#eef5ff;
+    --soft-2:#ecf9f1;
+    --shadow:0 1px 2px rgba(10,12,20,.04),0 8px 24px rgba(10,12,20,.06);
+    --shadow-lg:0 30px 60px -20px rgba(10,12,20,.18),0 8px 24px rgba(10,12,20,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:'Geist',system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-feature-settings:'ss01','cv11','cv02'}
+  body{font-size:15px;line-height:1.55}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+  img{display:block;max-width:100%}
+  .mono{font-family:'Geist Mono',ui-monospace,monospace}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+
+  /* Nav */
+  nav.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.7);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
+  nav.top .row{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:600;letter-spacing:-.02em;font-size:18px}
+  .brand .mk{width:24px;height:24px;border-radius:8px;background:radial-gradient(circle at 30% 30%,#5ea8ff,#0a84ff 60%,#0556b3);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 2px 8px rgba(10,132,255,.35)}
+  .nav-links{display:flex;gap:28px}
+  .nav-links a{font-size:14px;color:var(--ink-2);transition:color .2s ease}
+  .nav-links a:hover{color:var(--brand)}
+  .nav-cta{display:flex;align-items:center;gap:10px}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid var(--line);border-radius:999px;font-size:12px;color:var(--mute)}
+  .pill .dot{width:7px;height:7px;border-radius:50%;background:var(--brand-2);box-shadow:0 0 0 4px rgba(52,199,89,.18)}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;font-weight:500;font-size:14px;transition:all .22s cubic-bezier(.2,.7,.2,1)}
+  .btn.primary{background:var(--ink);color:#fff;box-shadow:0 8px 20px -8px rgba(10,10,12,.4)}
+  .btn.primary:hover{transform:translateY(-1px);box-shadow:0 14px 30px -10px rgba(10,10,12,.45)}
+  .btn.brand{background:linear-gradient(180deg,#0a84ff,#0566cc);color:#fff;box-shadow:0 10px 24px -8px rgba(10,132,255,.55),inset 0 1px 0 rgba(255,255,255,.25)}
+  .btn.brand:hover{transform:translateY(-1px);filter:brightness(1.05)}
+  .btn.ghost{background:var(--bg-2);color:var(--ink);border:1px solid var(--line)}
+  .btn.ghost:hover{background:var(--bg-3)}
+  .btn .arrow{transition:transform .25s ease}
+  .btn:hover .arrow{transform:translateX(3px)}
+
+  /* Hero */
+  .hero{padding:88px 0 64px;position:relative;overflow:hidden;text-align:center}
+  .hero .ann{display:inline-flex;align-items:center;gap:8px;padding:5px 6px 5px 14px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--mute);background:var(--bg-2);margin-bottom:32px}
+  .hero .ann b{background:var(--ink);color:#fff;padding:3px 9px;border-radius:999px;font-weight:600;font-size:12px}
+  .hero h1{font-size:clamp(48px,7.6vw,108px);line-height:.96;letter-spacing:-.04em;font-weight:700;max-width:18ch;margin:0 auto}
+  .hero h1 .grad{background:linear-gradient(90deg,#0a84ff,#34c759 65%,#0a84ff);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:hueshift 8s linear infinite}
+  @keyframes hueshift{to{background-position:200% 0}}
+  .hero h1 .strike{position:relative;color:var(--mute-2);display:inline-block}
+  .hero h1 .strike::after{content:"";position:absolute;left:-3%;right:-3%;top:55%;height:8px;background:#ffdfd2;border-radius:4px;z-index:-1;transform:rotate(-2deg)}
+  .hero .lede{margin:28px auto 0;max-width:62ch;font-size:19px;color:var(--ink-2);line-height:1.5}
+  .hero .ctas{margin-top:36px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .hero .micro{margin-top:18px;display:flex;justify-content:center;gap:18px;color:var(--mute);font-size:13px;flex-wrap:wrap}
+  .hero .micro span{display:inline-flex;align-items:center;gap:6px}
+  .hero .micro .ck{width:16px;height:16px;border-radius:50%;background:var(--soft-2);color:var(--brand-2);display:grid;place-items:center;font-size:10px}
+
+  .hero .stats{margin:72px auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;max-width:980px}
+  .hero .stat{padding:24px;background:var(--bg-2);border:1px solid var(--line);border-radius:20px;text-align:left;transition:transform .25s ease, box-shadow .25s ease}
+  .hero .stat:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .hero .stat .n{font-size:40px;font-weight:700;letter-spacing:-.03em;line-height:1;color:var(--ink)}
+  .hero .stat .n sup{font-size:18px;color:var(--mute);vertical-align:top;font-weight:500}
+  .hero .stat .l{margin-top:6px;font-size:13px;color:var(--mute)}
+
+  /* Section */
+  section{padding:96px 0;position:relative}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'Geist Mono',monospace;font-size:12px;color:var(--brand);background:var(--soft);padding:6px 12px;border-radius:999px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--brand)}
+  .section-title{font-size:clamp(38px,5vw,60px);line-height:1.02;letter-spacing:-.035em;font-weight:700;max-width:18ch}
+  .section-sub{margin-top:14px;color:var(--mute);font-size:17px;max-width:62ch}
+
+  /* Logos */
+  .logos-wrap{display:flex;flex-direction:column;align-items:center;text-align:center;gap:28px}
+  .trusted-line{display:inline-flex;align-items:center;gap:12px;font-size:14px;color:var(--mute)}
+  .trusted-line .avs{display:flex}
+  .av{width:28px;height:28px;border-radius:50%;border:2px solid #fff;margin-left:-8px;background:#ddd;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:600}
+  .av:nth-child(1){background:#0a84ff;margin-left:0}.av:nth-child(2){background:#34c759}.av:nth-child(3){background:#ff9500}.av:nth-child(4){background:#af52de}.av:nth-child(5){background:#ff3b30}
+  .trusted-line .stars{color:#ffb700;letter-spacing:2px}
+  .logos{display:grid;grid-template-columns:repeat(6,1fr);gap:24px;align-items:center;width:100%;opacity:.85}
+  .logos .lg{display:flex;justify-content:center;align-items:center;height:48px;font-size:18px;color:var(--mute);font-weight:600;letter-spacing:-.01em}
+  .logos .lg.serif{font-family:'Geist',serif;font-style:italic}
+  .logos .lg.mono{font-family:'Geist Mono',monospace;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+
+  /* Features */
+  .feat-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:20px;margin-top:48px}
+  .card{background:var(--bg-2);border:1px solid var(--line);border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:14px;transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s ease, border-color .3s ease;position:relative;overflow:hidden}
+  .card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:#dbdee6}
+  .card .ic{width:42px;height:42px;border-radius:12px;background:#fff;box-shadow:var(--shadow);display:grid;place-items:center;color:var(--brand)}
+  .card h3{font-size:20px;letter-spacing:-.015em;font-weight:600}
+  .card p{color:var(--mute);font-size:14.5px;line-height:1.5}
+  .span-4{grid-column:span 4}
+  .span-6{grid-column:span 6}
+  .span-8{grid-column:span 8}
+  .span-12{grid-column:span 12}
+  .card.hero-card{background:linear-gradient(135deg,#0a84ff 0%,#34c759 130%);color:#fff;padding:36px;min-height:280px;justify-content:space-between;border:0}
+  .card.hero-card .ic{background:rgba(255,255,255,.18);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+  .card.hero-card h3{font-size:42px;line-height:1.02;letter-spacing:-.03em;max-width:14ch;font-weight:700}
+  .card.hero-card p{color:rgba(255,255,255,.86);max-width:46ch}
+  .badge2w{position:absolute;right:32px;top:32px;display:flex;flex-direction:column;align-items:flex-end;color:#fff}
+  .badge2w .num{font-size:96px;font-weight:800;line-height:.85;letter-spacing:-.04em}
+  .badge2w .lbl{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.9}
+  .card.dark{background:var(--ink);color:#fff;border:0}
+  .card.dark .ic{background:#1c1c1f;color:#fff;box-shadow:none}
+  .card.dark p{color:var(--mute-2)}
+
+  /* How it works */
+  .steps{margin-top:48px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .step{background:var(--bg-2);border:1px solid var(--line);border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:16px;position:relative;transition:transform .25s ease, box-shadow .25s ease}
+  .step:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .step .head{display:flex;justify-content:space-between;align-items:center}
+  .step .badge{width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-weight:600;font-size:14px;color:var(--ink)}
+  .step .time{font-family:'Geist Mono',monospace;font-size:11px;color:var(--mute);letter-spacing:.08em;text-transform:uppercase}
+  .step h3{font-size:24px;letter-spacing:-.02em;font-weight:600;line-height:1.1}
+  .step p{color:var(--mute);font-size:14.5px;line-height:1.55}
+  .step .demo{margin-top:6px;border-radius:14px;background:#fff;border:1px solid var(--line);padding:14px;font-family:'Geist Mono',monospace;font-size:12px;color:var(--mute);min-height:100px;display:flex;flex-direction:column;gap:6px}
+  .step .demo .ln{display:flex;gap:6px;align-items:center}
+  .step .demo .ln::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--brand)}
+  .step .demo .ln.gn::before{background:var(--brand-2)}
+
+  /* Blueprint interactive */
+  .blueprint-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;background:var(--soft);color:var(--brand);border-radius:999px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+  .controls{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin:24px 0}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px;background:var(--bg-2);border:1px solid var(--line);border-radius:999px}
+  .tab{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:transparent;font-size:13.5px;color:var(--ink-2);transition:all .2s ease}
+  .tab:hover{color:var(--ink)}
+  .tab.active{background:var(--ink);color:#fff;box-shadow:0 4px 10px -2px rgba(10,10,12,.25)}
+  .tab .ic{width:14px;height:14px}
+  .vw-switch{display:inline-flex;padding:4px;background:var(--bg-2);border:1px solid var(--line);border-radius:999px;gap:2px}
+  .vw{padding:8px 12px;border-radius:999px;color:var(--mute);display:inline-flex;align-items:center;gap:6px;font-size:12.5px;transition:all .2s ease}
+  .vw:hover{color:var(--ink)}
+  .vw.active{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+
+  .browser{border-radius:20px;background:#0e0e10;overflow:hidden;box-shadow:0 60px 100px -40px rgba(10,12,20,.25),0 12px 30px -12px rgba(10,12,20,.12)}
+  .chrome{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#0e0e10;color:#a8a8b0;border-bottom:1px solid #222226}
+  .lights{display:flex;gap:6px}
+  .lights span{width:12px;height:12px;border-radius:50%}
+  .lights span:nth-child(1){background:#ff5f56}.lights span:nth-child(2){background:#ffbd2e}.lights span:nth-child(3){background:#27c93f}
+  .url{flex:1;background:#1a1a1d;color:#d8d8df;border-radius:8px;padding:7px 14px;font-family:'Geist Mono',monospace;font-size:12px;display:flex;align-items:center;gap:8px;border:1px solid #222226}
+  .url .lock{color:#27c93f}
+  .viewport{background:var(--bg-3);display:flex;justify-content:center;transition:padding .35s cubic-bezier(.2,.7,.2,1);padding:0}
+  .viewport.tablet{padding:24px 16%}
+  .viewport.mobile{padding:24px 36%}
+  .frame-inner{width:100%;background:#fff;transition:opacity .25s ease;min-height:580px}
+  .viewport.tablet .frame-inner,.viewport.mobile .frame-inner{border-radius:18px;box-shadow:0 20px 40px -20px rgba(0,0,0,.3);overflow:hidden}
+
+  /* Mini site (soft style) */
+  .mini{font-family:'Geist',sans-serif;color:#0a0a0c}
+  .mini .mhead{display:flex;justify-content:space-between;align-items:center;padding:18px 28px;border-bottom:1px solid #ececef}
+  .mini .mlogo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:16px}
+  .mini .sq{width:22px;height:22px;border-radius:8px}
+  .mini .mnav{display:flex;gap:16px;font-size:12.5px;color:#555}
+  .mini .mphone{font-weight:600;font-size:13px;padding:8px 14px;border-radius:999px;background:#f1f3f7;display:inline-flex;align-items:center;gap:6px}
+  .mini .mhero{padding:40px 28px 28px;display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center}
+  .mini h1{font-size:38px;font-weight:700;line-height:1;letter-spacing:-.03em}
+  .mini h1 .em{background:linear-gradient(90deg,#0a84ff,#34c759);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .mini .msub{margin-top:14px;color:#555;font-size:14px;line-height:1.5;max-width:36ch}
+  .mini .mctas{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+  .mini .mctas .b1{background:linear-gradient(180deg,#34c759,#1e9b46);color:#fff;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;box-shadow:0 8px 18px -6px rgba(52,199,89,.55)}
+  .mini .mctas .b2{background:#f1f3f7;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;color:#0a0a0c}
+  .mini .mhero-img{height:170px;border-radius:16px;background:linear-gradient(135deg,#dfe7f3,#eef5ff);display:grid;place-items:center;font-size:11px;color:#7c8493;font-family:'Geist Mono',monospace;text-transform:uppercase;letter-spacing:.1em;border:1px dashed #cdd6e3}
+  .mini .mcards{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 28px 28px}
+  .mini .mcard{background:#f7f8fa;border:1px solid #eceef2;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px}
+  .mini .mcard h4{font-size:15px;letter-spacing:-.01em;font-weight:600}
+  .mini .mcard p{font-size:12.5px;color:#666;line-height:1.5}
+  .mini .stars{color:#ffb700;letter-spacing:2px;font-size:13px}
+  .mini .quote{font-size:13px;color:#1a1a1a;line-height:1.45;font-weight:500}
+  .mini .author{font-size:11px;color:#888}
+  .mini .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .mini .chip{font-size:10.5px;background:#fff;border:1px solid #eceef2;border-radius:999px;padding:4px 9px;color:#555}
+  .viewport.mobile .mini .mhero{grid-template-columns:1fr;padding:24px 18px 20px}
+  .viewport.mobile .mini h1{font-size:28px}
+  .viewport.mobile .mini .mhero-img{height:130px}
+  .viewport.mobile .mini .mcards{grid-template-columns:1fr;padding:0 18px 24px}
+  .viewport.mobile .mini .mnav{display:none}
+
+  /* Pricing */
+  .pricing{margin-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .tier{padding:36px;border-radius:24px;background:var(--bg-2);border:1px solid var(--line);display:flex;flex-direction:column;gap:18px;position:relative;transition:transform .25s ease, box-shadow .25s ease}
+  .tier:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+  .tier.featured{background:linear-gradient(180deg,#0a0a0c,#1a1a1f);color:#fff;border-color:#1a1a1f}
+  .tier .ribbon{position:absolute;top:24px;right:24px;background:linear-gradient(180deg,#34c759,#1e9b46);color:#fff;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;padding:5px 11px;border-radius:999px;font-weight:600}
+  .tier .name{font-family:'Geist Mono',monospace;font-size:12px;color:var(--brand);letter-spacing:.08em;text-transform:uppercase}
+  .tier.featured .name{color:#7fdb98}
+  .tier h3{font-size:26px;letter-spacing:-.02em;font-weight:600;line-height:1.1;max-width:24ch}
+  .tier .price{display:flex;align-items:baseline;gap:6px;margin-top:4px}
+  .tier .price .amt{font-size:72px;font-weight:800;letter-spacing:-.04em;line-height:1}
+  .tier .price .per{font-size:14px;color:var(--mute)}
+  .tier.featured .price .per{color:var(--mute-2)}
+  .tier ul{list-style:none;display:flex;flex-direction:column;gap:10px;padding:18px 0;border-top:1px solid var(--line)}
+  .tier.featured ul{border-top-color:#2a2a30}
+  .tier li{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+  .tier li .ck{width:18px;height:18px;flex:none;border-radius:50%;background:var(--soft-2);color:var(--brand-2);display:grid;place-items:center;font-size:11px;margin-top:2px}
+  .tier.featured li .ck{background:rgba(52,199,89,.18)}
+  .tier .btn{justify-content:center}
+  .tier.featured .btn.primary{background:#fff;color:var(--ink);box-shadow:0 10px 24px -8px rgba(255,255,255,.25)}
+
+  /* Testimonials */
+  .quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+  .qcard{background:var(--bg-2);border:1px solid var(--line);border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:18px;min-height:300px;transition:transform .25s ease, box-shadow .25s ease}
+  .qcard:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .qcard .stars{color:#ffb700;letter-spacing:3px;font-size:14px}
+  .qcard blockquote{font-size:18px;line-height:1.35;letter-spacing:-.015em;color:var(--ink);font-weight:500}
+  .qcard .who{margin-top:auto;display:flex;gap:12px;align-items:center}
+  .qcard .av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#0a84ff,#34c759);color:#fff;display:grid;place-items:center;font-weight:600;font-size:14px;margin-left:0}
+  .qcard .who .name{font-weight:600;font-size:14px}
+  .qcard .who .trade{font-size:12.5px;color:var(--mute)}
+
+  /* Final CTA */
+  .final{padding:120px 0;background:radial-gradient(60% 80% at 50% 0%,#eef5ff,transparent 70%),var(--bg);text-align:center;position:relative;overflow:hidden}
+  .final::before{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);width:920px;height:920px;border-radius:50%;background:radial-gradient(circle,#dfe9ff 0%,transparent 60%);z-index:0;filter:blur(40px)}
+  .final .wrap{position:relative;z-index:1}
+  .final h2{font-size:clamp(48px,7vw,96px);line-height:1;letter-spacing:-.04em;font-weight:700;max-width:18ch;margin:0 auto}
+  .final h2 .grad{background:linear-gradient(90deg,#0a84ff,#34c759);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .final p{margin:24px auto 0;color:var(--mute);font-size:18px;max-width:54ch}
+  .final .ctas{margin-top:36px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .final .strip{margin:60px auto 0;max-width:920px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;text-align:left}
+  .final .strip .it{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}
+  .final .strip .n{font-weight:700;font-size:24px;letter-spacing:-.02em}
+  .final .strip .l{margin-top:4px;color:var(--mute);font-size:13px}
+
+  footer{padding:40px 0;border-top:1px solid var(--line);font-size:13px;color:var(--mute)}
+  footer .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+  footer .links{display:flex;gap:24px}
+
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  .reveal.visible{opacity:1;transform:none}
+
+  @media (max-width:900px){
+    .hero .stats{grid-template-columns:1fr 1fr}
+    .feat-grid{grid-template-columns:repeat(6,1fr)}
+    .span-4{grid-column:span 3}.span-6,.span-8,.span-12{grid-column:span 6}
+    .card.hero-card h3{font-size:32px}.badge2w .num{font-size:64px}
+    .steps,.quotes,.pricing{grid-template-columns:1fr}
+    .final .strip{grid-template-columns:1fr 1fr}
+    .logos{grid-template-columns:repeat(3,1fr);gap:18px 24px}
+    .viewport.tablet,.viewport.mobile{padding:18px}
+  }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap row">
+    <div class="brand">
+      <span class="mk"></span> Solvance
+    </div>
+    <div class="nav-links">
+      <a href="#included">Included</a>
+      <a href="#process">Process</a>
+      <a href="#blueprint">Live demo</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#proof">Proof</a>
+    </div>
+    <div class="nav-cta">
+      <span class="pill"><span class="dot"></span> Booking June</span>
+      <a href="#book" class="btn primary">Book a call <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <a class="ann" href="#process"><b>New</b> The 14-day build, walked through end-to-end →</a>
+    <h1>Your competitors are <span class="grad">showing up</span> on Google.<br/><span class="strike">You're</span> not.</h1>
+    <p class="lede">Solvance builds and runs the website, Google profile, and review funnel for local trades — barbershops, HVAC, plumbing, roofing, electrical. Two-week build. One flat monthly fee. Cancel anytime.</p>
+    <div class="ctas">
+      <a href="#book" class="btn brand">Book a strategy call <span class="arrow">→</span></a>
+      <a href="#included" class="btn ghost">See what's included</a>
+    </div>
+    <div class="micro">
+      <span><span class="ck">✓</span> 14-day build guarantee</span>
+      <span><span class="ck">✓</span> No long-term contracts</span>
+      <span><span class="ck">✓</span> Hosting + edits included</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="n">14<sup>days</sup></div><div class="l">Average build time, start to launch</div></div>
+      <div class="stat"><div class="n"><sup>$</sup>97<sup>/mo</sup></div><div class="l">Starting price — flat, no setup fee</div></div>
+      <div class="stat"><div class="n">134<sup>+</sup></div><div class="l">Local operators trust Solvance</div></div>
+      <div class="stat"><div class="n">4.9<sup>★</sup></div><div class="l">Average client rating across reviews</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGOS -->
+<section style="padding-top:32px;padding-bottom:48px;">
+  <div class="wrap logos-wrap">
+    <div class="trusted-line">
+      <div class="avs">
+        <span class="av">M</span><span class="av">D</span><span class="av">T</span><span class="av">B</span><span class="av">+</span>
+      </div>
+      <span><b style="color:var(--ink)">134 local businesses</b> · <span class="stars">★★★★★</span> 4.9 average rating</span>
+    </div>
+    <div class="logos">
+      <div class="lg serif">Atlas Cuts</div>
+      <div class="lg mono">NORTHWIND HVAC</div>
+      <div class="lg" style="font-family:'Geist',sans-serif;font-weight:700;letter-spacing:-.02em;">Briggs &amp; Sons</div>
+      <div class="lg serif">RoofKraft</div>
+      <div class="lg mono">VOLT &amp; CO.</div>
+      <div class="lg" style="font-weight:700;letter-spacing:-.02em;">Maple Street</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INCLUDED -->
+<section id="included">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot"></span> What's included</span>
+    <h2 class="section-title">Everything in the box. <br/>No upsells, no surprise invoices.</h2>
+    <p class="section-sub">One flat fee covers the whole stack — design, build, hosting, security, troubleshooting, and every future edit. We don't nickel-and-dime trade business owners.</p>
+
+    <div class="feat-grid">
+      <div class="card hero-card span-8">
+        <div>
+          <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg></div>
+          <h3 style="margin-top:18px;">Live in 14 days. Or you don't pay.</h3>
+          <p style="margin-top:10px;">Day 1 we kick off. Day 14 you're on Google, on the map, and in your customers' phones. Miss the deadline and the meter doesn't start.</p>
+        </div>
+        <div class="badge2w">
+          <span class="num">14</span>
+          <span class="lbl">Day build</span>
+        </div>
+      </div>
+      <div class="card span-4 dark">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0z"/><path d="M3 12h18M12 3a13 13 0 0 1 0 18M12 3a13 13 0 0 0 0 18"/></svg></div>
+        <h3>Website on Google</h3>
+        <p>On-page SEO, schema, fast hosting, GBP setup — so your shop isn't a ghost when locals search.</p>
+      </div>
+
+      <div class="card span-4">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v6c0 5-4 8-8 8s-8-3-8-8V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>Hosting &amp; security covered</h3>
+        <p>SSL, malware monitoring, daily backups. Your site, your domain, our problem.</p>
+      </div>
+      <div class="card span-4">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M3 20h2M4 3l16 10L4 20V3z"/></svg></div>
+        <h3>We make every future change</h3>
+        <p>New service? New hours? Send a text. Edits in 24h, never a per-hour rate.</p>
+      </div>
+      <div class="card span-4">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18M3 12h18M3 17h12"/><circle cx="20" cy="17" r="1.5"/></svg></div>
+        <h3>Troubleshooting included</h3>
+        <p>Site down at midnight? Form broken? We fix it same-day. No support tickets.</p>
+      </div>
+
+      <div class="card span-3">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></div>
+        <h3>Project gallery</h3>
+        <p>Before / after gallery — the single biggest booking driver for trades.</p>
+      </div>
+      <div class="card span-3">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6 6 .9-4.5 4.4 1 6.7L12 17l-5.5 3 1-6.7L3 8.9 9 8z"/></svg></div>
+        <h3>Reviews on display</h3>
+        <p>Live 5-star Google reviews syndicated to your site, automatically.</p>
+      </div>
+      <div class="card span-3">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <h3>Works on every device</h3>
+        <p>Phone-first design — 78% of your traffic comes from the homeowner's iPhone.</p>
+      </div>
+      <div class="card span-3">
+        <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M21 3l-9 9M14 21H4a1 1 0 0 1-1-1V10"/></svg></div>
+        <h3>No contracts</h3>
+        <p>Month-to-month. We earn the renewal every month — or we don't.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="process" style="background:var(--bg-2);">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot"></span> How it works</span>
+    <h2 class="section-title">From phone call to front page. <br/>In <span style="background:linear-gradient(90deg,#0a84ff,#34c759);-webkit-background-clip:text;background-clip:text;color:transparent">14 days flat</span>.</h2>
+    <p class="section-sub">No demo decks, no agency speak. We start the day you book, finish two weeks later, and stay on call from then on.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="head"><span class="badge">1</span><span class="time">Day 0 · 20 min</span></div>
+        <h3>Strategy call</h3>
+        <p>Live screen-share of your competitors' sites and Google profiles in your zip. You leave with the exact plan to outrank them — book us or not.</p>
+        <div class="demo">
+          <div class="ln">Pulling top 3 competitors in 78704…</div>
+          <div class="ln gn">Map-pack gap identified: 4 fixable issues</div>
+          <div class="ln gn">Estimated lift: +12 calls / mo</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="head"><span class="badge">2</span><span class="time">Day 1–13</span></div>
+        <h3>We build, you work</h3>
+        <p>One assigned builder. Daily updates by text or Slack. You give us a logo, three photos, and your hours. We handle the rest — design, copy, dev, SEO.</p>
+        <div class="demo">
+          <div class="ln">Day 3 — homepage live in staging</div>
+          <div class="ln">Day 7 — service pages + reviews wired</div>
+          <div class="ln gn">Day 11 — GBP optimized, schema deployed</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="head"><span class="badge">3</span><span class="time">Day 14 · 25 min</span></div>
+        <h3>Launch &amp; lock in</h3>
+        <p>We walk you through every feature, hand over logins, file the review funnel, and monitor your first week of leads. Then we maintain — forever.</p>
+        <div class="demo">
+          <div class="ln gn">Site live · DNS propagated</div>
+          <div class="ln gn">First lead logged · 2h 14m post-launch</div>
+          <div class="ln gn">5-star review automation: active</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTERACTIVE BLUEPRINT -->
+<section id="blueprint">
+  <div class="wrap">
+    <span class="blueprint-pill"><span style="width:6px;height:6px;border-radius:50%;background:currentColor;"></span> Interactive blueprint · Live demo</span>
+    <h2 class="section-title" style="margin-top:12px;">Preview the layout for <br/>your trade.</h2>
+    <p class="section-sub">Each industry gets its own blueprint — copy, sections, CTAs tuned to how homeowners actually buy. Click a trade. Watch it load.</p>
+
+    <div class="controls">
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-industry="barber"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l12 16M18 4L6 20"/><circle cx="5" cy="7" r="2"/><circle cx="5" cy="17" r="2"/></svg> Barbershop</button>
+        <button class="tab" data-industry="hvac"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg> HVAC</button>
+        <button class="tab" data-industry="plumbing"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h6v4H4zM10 4v8M14 12h6v8h-6zM14 16h-4"/></svg> Plumbing</button>
+        <button class="tab" data-industry="roofing"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-7 9 7M5 11v9h14v-9"/></svg> Roofing</button>
+        <button class="tab" data-industry="electrical"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L5 14h6l-2 8 8-12h-6l2-8z"/></svg> Electrical</button>
+      </div>
+      <div class="vw-switch" id="viewports">
+        <button class="vw active" data-vw="desktop"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="13" rx="1"/><path d="M8 21h8M12 17v4"/></svg> Desktop</button>
+        <button class="vw" data-vw="tablet"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/></svg> Tablet</button>
+        <button class="vw" data-vw="mobile"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/></svg> Mobile</button>
+      </div>
+    </div>
+
+    <div class="browser">
+      <div class="chrome">
+        <div class="lights"><span></span><span></span><span></span></div>
+        <div class="url"><span class="lock">●</span><span id="urlText">atlascuts.com</span><span style="margin-left:auto;opacity:.5">⟳</span></div>
+      </div>
+      <div class="viewport desktop" id="viewport">
+        <div class="frame-inner" id="frameInner"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" style="background:var(--bg-2);">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot"></span> Pricing</span>
+    <h2 class="section-title">Two plans. Both flat. <br/>Cancel anytime.</h2>
+    <p class="section-sub">If the price doesn't make sense for your revenue, don't book. If it does, you'll know exactly what you're paying for the next 12 months.</p>
+
+    <div class="pricing">
+      <div class="tier">
+        <span class="name">Local Presence</span>
+        <h3>A website that exists for you, not against you.</h3>
+        <div class="price"><span class="amt">$97</span><span class="per">/month · billed monthly</span></div>
+        <ul>
+          <li><span class="ck">✓</span> 5-page industry-specific website</li>
+          <li><span class="ck">✓</span> Hosting, SSL, daily backups</li>
+          <li><span class="ck">✓</span> Future edits — never an hourly fee</li>
+          <li><span class="ck">✓</span> Mobile + tablet + desktop optimized</li>
+          <li><span class="ck">✓</span> Project gallery + reviews module</li>
+          <li><span class="ck">✓</span> 2-week build window</li>
+          <li><span class="ck">✓</span> No long-term contracts</li>
+        </ul>
+        <a href="#book" class="btn ghost">Choose Local Presence <span class="arrow">→</span></a>
+      </div>
+      <div class="tier featured">
+        <span class="ribbon">Most picked · 7 / 10</span>
+        <span class="name">Local Visibility</span>
+        <h3>Everything in Tier 1 — plus the moves that put you on the map.</h3>
+        <div class="price"><span class="amt">$107</span><span class="per">/month · billed monthly</span></div>
+        <ul>
+          <li><span class="ck">✓</span> Everything in Local Presence</li>
+          <li><span class="ck">✓</span> Google Business Profile build + optimization</li>
+          <li><span class="ck">✓</span> Review funnel (SMS &amp; QR)</li>
+          <li><span class="ck">✓</span> Local SEO &amp; schema markup</li>
+          <li><span class="ck">✓</span> Map-pack monitoring</li>
+          <li><span class="ck">✓</span> Monthly performance email</li>
+          <li><span class="ck">✓</span> Priority same-day troubleshooting</li>
+        </ul>
+        <a href="#book" class="btn primary">Choose Local Visibility <span class="arrow">→</span></a>
+      </div>
+    </div>
+    <div style="margin-top:24px;display:flex;justify-content:space-between;align-items:center;color:var(--mute);font-size:13px;flex-wrap:wrap;gap:12px;">
+      <span>No setup fee · No contract · 14-day build guarantee or you don't pay</span>
+      <span class="mono" style="font-size:12px;">USD · Stripe / ACH</span>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="proof">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot"></span> Proof</span>
+    <h2 class="section-title">Real shops. Real receipts.</h2>
+    <p class="section-sub">Three operators, three trades, the same Tuesday-after-launch story.</p>
+
+    <div class="quotes">
+      <div class="qcard">
+        <span class="stars">★★★★★</span>
+        <blockquote>"Booked four chairs solid the week after launch. I used to chase Instagram DMs — now Google does the chasing."</blockquote>
+        <div class="who">
+          <div class="av">M</div>
+          <div>
+            <div class="name">Marco D.</div>
+            <div class="trade">Atlas Cuts · Austin, TX · Barbershop</div>
+          </div>
+        </div>
+      </div>
+      <div class="qcard">
+        <span class="stars">★★★★★</span>
+        <blockquote>"Two weeks. Two. The last guy I hired took five months and I still couldn't update my phone number."</blockquote>
+        <div class="who">
+          <div class="av" style="background:linear-gradient(135deg,#ff9500,#ff3b30)">D</div>
+          <div>
+            <div class="name">Dale R.</div>
+            <div class="trade">Northwind HVAC · Denver, CO</div>
+          </div>
+        </div>
+      </div>
+      <div class="qcard">
+        <span class="stars">★★★★★</span>
+        <blockquote>"Map-pack jump, reviews on autopilot, and a builder I can text at 9pm. Worth every dollar."</blockquote>
+        <div class="who">
+          <div class="av" style="background:linear-gradient(135deg,#34c759,#0a84ff)">T</div>
+          <div>
+            <div class="name">Tasha &amp; Lou</div>
+            <div class="trade">Briggs &amp; Sons Plumbing · Cleveland, OH</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final" id="book">
+  <div class="wrap">
+    <h2>Stop being the local shop nobody can <span class="grad">find</span>.</h2>
+    <p>20-minute call. We screen-share your competitors' sites and the exact moves to outrank them. No pitch deck, no obligation, no slides.</p>
+    <div class="ctas">
+      <a href="#" class="btn brand">Book my strategy call <span class="arrow">→</span></a>
+      <a href="#pricing" class="btn ghost">Just show me the price</a>
+    </div>
+    <div class="strip">
+      <div class="it"><div class="n">14 days</div><div class="l">From booking to live site, every single project.</div></div>
+      <div class="it"><div class="n">$97/mo</div><div class="l">Flat. No setup. No contract. Cancel anytime.</div></div>
+      <div class="it"><div class="n">134+</div><div class="l">Local operators trusting Solvance today.</div></div>
+      <div class="it"><div class="n">4.9★</div><div class="l">Average client rating across all reviews.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap row">
+    <span>© 2026 Solvance Marketing Solutions — A studio for local operators.</span>
+    <div class="links">
+      <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Contact</a>
+      <a href="all-designs.html" style="color:var(--brand);">↩ Showroom</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const INDUSTRIES = {
+  barber:{name:"Atlas Cuts",url:"atlascuts.com",phone:"(512) 555-0182",col:"linear-gradient(135deg,#1a1a1a,#3a3a3a)",
+    headlinePre:"Sharp fades.",headlineEm:"Same-day chairs.",
+    sub:"Walk-in or book online — Austin's most-rated 4-chair barbershop is one tap away.",
+    cta:"Book a chair",ghost:"See the styles",
+    nav:["Services","Stylists","Gallery","Reviews"],
+    serviceTitle:"Live chair availability",
+    serviceBody:"Pick a stylist, pick a time, walk in. We hold your spot for 10 minutes.",
+    chips:["Skin fade","Beard sculpt","Hot towel","Kids cut"],
+    reviewQuote:"Best fade in Austin, and the booking site actually works on my phone.",
+    reviewer:"Jamal R. · Regular",heroLabel:"Hero · barbershop interior"},
+  hvac:{name:"Northwind HVAC",url:"northwindhvac.com",phone:"(303) 555-0144",col:"linear-gradient(135deg,#0d3a5e,#1a6bb0)",
+    headlinePre:"Heating out at midnight?",headlineEm:"We pick up.",
+    sub:"Denver's only 24/7 HVAC crew with same-day install and a 10-year labor guarantee.",
+    cta:"Same-day quote",ghost:"View pricing",
+    nav:["Services","Emergency","Financing","Reviews"],
+    serviceTitle:"24/7 emergency dispatch",
+    serviceBody:"Real techs pick up. Avg on-site time: 47 min inside the metro.",
+    chips:["AC repair","Furnace install","Heat pump","Duct cleaning"],
+    reviewQuote:"Called at 11pm in January. Tech was in my basement by midnight.",
+    reviewer:"Sarah L. · Aurora homeowner",heroLabel:"Hero · technician + homeowner"},
+  plumbing:{name:"Briggs & Sons",url:"briggsandsons.com",phone:"(216) 555-0123",col:"linear-gradient(135deg,#1f5e6e,#39a3b9)",
+    headlinePre:"Leak at 2am?",headlineEm:"We're on the way.",
+    sub:"Cleveland's family plumber since 1996. Flat rates. No after-hours markup.",
+    cta:"Request a plumber",ghost:"Flat-rate pricing",
+    nav:["Services","Pricing","About","Reviews"],
+    serviceTitle:"Flat-rate emergency call",
+    serviceBody:"Quoted before we start. Beat the quote? You pay the lower number.",
+    chips:["Drain clearing","Water heater","Repipe","Sump pump"],
+    reviewQuote:"Three generations of Briggs. Quote is always what I pay. Period.",
+    reviewer:"Edward T. · Cleveland Hts",heroLabel:"Hero · plumber + service van"},
+  roofing:{name:"RoofKraft",url:"roofkraft.com",phone:"(404) 555-0167",col:"linear-gradient(135deg,#3a2218,#8a4628)",
+    headlinePre:"Storm hit your roof?",headlineEm:"We hit back.",
+    sub:"Atlanta's #1-rated storm response crew. Free drone inspection, insurance liaison.",
+    cta:"Free inspection",ghost:"Compare roof types",
+    nav:["Services","Storm","Warranty","Reviews"],
+    serviceTitle:"Free drone inspection",
+    serviceBody:"4K drone maps every shingle. Report yours, whether you hire us or not.",
+    chips:["Asphalt","Metal","Storm","Claims"],
+    reviewQuote:"Drone report had my insurance company waving the white flag in an hour.",
+    reviewer:"Brenda M. · Marietta",heroLabel:"Hero · roof crew on site"},
+  electrical:{name:"Volt & Co.",url:"voltandco.com",phone:"(602) 555-0198",col:"linear-gradient(135deg,#2c1f3a,#7a4dd6)",
+    headlinePre:"Panel from 1978?",headlineEm:"Time to upgrade.",
+    sub:"Phoenix's licensed master electricians. Panel upgrades, EV chargers, rewires.",
+    cta:"Schedule estimate",ghost:"EV pricing",
+    nav:["Services","EV","Estimates","Reviews"],
+    serviceTitle:"Same-day panel quote",
+    serviceBody:"Text a photo of your panel — we'll text back a real estimate the same hour.",
+    chips:["Panel","EV charger","Rewire","Surge"],
+    reviewQuote:"Texted a photo at 8am, quote at 8:34, installed Friday.",
+    reviewer:"Diego H. · Phoenix",heroLabel:"Hero · electrician on site"}
+};
+
+function renderMini(key){
+  const d=INDUSTRIES[key];
+  return `
+  <div class="mini">
+    <div class="mhead">
+      <div class="mlogo"><span class="sq" style="background:${d.col}"></span> ${d.name}</div>
+      <div class="mnav">${d.nav.map(n=>`<span>${n}</span>`).join('')}</div>
+      <div class="mphone">📞 ${d.phone}</div>
+    </div>
+    <div class="mhero">
+      <div>
+        <h1>${d.headlinePre} <span class="em">${d.headlineEm}</span></h1>
+        <p class="msub">${d.sub}</p>
+        <div class="mctas"><a class="b1">${d.cta} →</a><a class="b2">${d.ghost}</a></div>
+      </div>
+      <div class="mhero-img">${d.heroLabel}</div>
+    </div>
+    <div class="mcards">
+      <div class="mcard">
+        <h4>${d.serviceTitle}</h4>
+        <p>${d.serviceBody}</p>
+        <div class="chips">${d.chips.map(c=>`<span class="chip">${c}</span>`).join('')}</div>
+      </div>
+      <div class="mcard">
+        <span class="stars">★★★★★</span>
+        <p class="quote">"${d.reviewQuote}"</p>
+        <span class="author">— ${d.reviewer}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+const frame=document.getElementById('frameInner');
+const url=document.getElementById('urlText');
+function setIndustry(k){
+  document.querySelectorAll('#tabs .tab').forEach(b=>b.classList.toggle('active',b.dataset.industry===k));
+  url.textContent=INDUSTRIES[k].url;
+  frame.style.opacity=0;
+  setTimeout(()=>{frame.innerHTML=renderMini(k);frame.style.opacity=1;},180);
+}
+function setVw(v){
+  document.querySelectorAll('#viewports .vw').forEach(b=>b.classList.toggle('active',b.dataset.vw===v));
+  document.getElementById('viewport').className='viewport '+v;
+}
+document.querySelectorAll('#tabs .tab').forEach(b=>b.addEventListener('click',()=>setIndustry(b.dataset.industry)));
+document.querySelectorAll('#viewports .vw').forEach(b=>b.addEventListener('click',()=>setVw(b.dataset.vw)));
+setIndustry('barber');
+
+const io=new IntersectionObserver((entries)=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}}),{threshold:.1});
+document.querySelectorAll('section,.card,.step,.qcard,.tier,.stat').forEach(el=>{el.classList.add('reveal');io.observe(el);});
+</script>
+</body>
+</html>
