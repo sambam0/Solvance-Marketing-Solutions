@@ -1141,9 +1141,11 @@
     }
 
     .tier.featured {
-      background: linear-gradient(180deg, #0a0a0c, #1a1a1f);
-      color: #fff;
-      border-color: #1a1a1f
+      background: var(--bg-2);
+      color: var(--ink);
+      border-color: var(--brand-2);
+      border-width: 2px;
+      box-shadow: 0 0 0 4px rgba(52, 199, 89, .10)
     }
 
     .tier .ribbon {
@@ -1169,7 +1171,7 @@
     }
 
     .tier.featured .name {
-      color: #7fdb98
+      color: var(--brand)
     }
 
     .tier h3 {
@@ -1200,7 +1202,7 @@
     }
 
     .tier.featured .price .per {
-      color: var(--mute-2)
+      color: var(--mute)
     }
 
     .tier ul {
@@ -1213,7 +1215,7 @@
     }
 
     .tier.featured ul {
-      border-top-color: #2a2a30
+      border-top-color: var(--line)
     }
 
     .tier li {
@@ -1245,9 +1247,9 @@
     }
 
     .tier.featured .btn.primary {
-      background: #fff;
-      color: var(--ink);
-      box-shadow: 0 10px 24px -8px rgba(255, 255, 255, .25)
+      background: var(--ink);
+      color: #fff;
+      box-shadow: 0 8px 20px -8px rgba(10, 10, 12, .4)
     }
 
     /* Testimonials */
@@ -1814,7 +1816,7 @@
           <a href="#book" class="btn ghost">Choose Local Presence <span class="arrow">→</span></a>
         </div>
         <div class="tier featured">
-          <span class="ribbon">Most picked · 7 / 10</span>
+          <span class="ribbon">Most Popular</span>
           <span class="name">Local Visibility</span>
           <h3>Everything in Tier 1 — plus the moves that put you on the map.</h3>
           <div class="price"><span class="amt">$107</span><span class="per">/month · billed monthly</span></div>
